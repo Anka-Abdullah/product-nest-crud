@@ -5,7 +5,10 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  constructor(private loggerService: LogService, private config: ConfigService) {}
+  constructor(
+    private loggerService: LogService,
+    private config: ConfigService,
+  ) {}
   private logger = new Logger('HTTP');
 
   use(request: Request, response: Response, next: NextFunction): void {
@@ -21,7 +24,6 @@ export class LoggerMiddleware implements NestMiddleware {
       );
       this.loggerService.saveLog(this.config.get('LOG_SAVE') + querystr);
     });
-    
 
     next();
   }

@@ -9,6 +9,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { LogService } from './log/log.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { LogService } from './log/log.service';
         PORT: Joi.number(),
       }),
     }),
-    // "ttl" adalah Time To Live, yang berarti jumlah waktu di mana ingin membatasi permintaan. 
+    // "ttl" adalah Time To Live, yang berarti jumlah waktu di mana ingin membatasi permintaan.
     // Dan batas tersebut digunakan untuk jumlah permintaan per ttl (limit).
     ThrottlerModule.forRoot({
       ttl: 60,
@@ -31,6 +32,7 @@ import { LogService } from './log/log.service';
     }),
     DatabaseModule,
     ProductsModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
@@ -42,10 +44,8 @@ import { LogService } from './log/log.service';
     },
   ],
 })
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-    .apply(LoggerMiddleware)
-    .forRoutes('*')
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
